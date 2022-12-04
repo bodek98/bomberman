@@ -5,6 +5,7 @@ body{
 
 #game-container{
     position: absolute;
+    display: grid;
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
@@ -13,4 +14,5 @@ body{
     height: 40vw;
     min-width: 400px;
     min-height: 400px;
+    text-align: center;
 }

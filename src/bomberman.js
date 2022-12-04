@@ -1,3 +1,6 @@
+const mapSize = 13;
+let gameContainer;
+
 class Tile {
   constructor(tileType) {
     this.tileType = tileType;
@@ -20,8 +23,10 @@ let mapWhiteList = [
 domReady(gameLoop);
 function gameLoop() {
   console.log("Start!");
+  gameContainer = document.getElementById("game-container");
 
-  let map = generateMap(13);
+  let map = generateMap(mapSize);
+  displayMap(map);
 }
 
 function clearSpawn(map) {
@@ -30,17 +35,17 @@ function clearSpawn(map) {
   });
 }
 
-function generateMap(tileAmount) {
+function generateMap() {
   // 1 dimention
-  let map = new Array(tileAmount);
+  let map = new Array(mapSize);
   // Adding second dimention
-  for (let i = 0; i < map.length; i++) {
-    map[i] = new Array(tileAmount);
+  for (let i = 0; i < mapSize; i++) {
+    map[i] = new Array(mapSize);
   }
 
   // Randomize envirnoment
-  for (let x = 0; x < map.length; x++) {
-    for (let y = 0; y < map.length; y++) {
+  for (let x = 0; x < mapSize; x++) {
+    for (let y = 0; y < mapSize; y++) {
       if ((x + 1) % 2 === 0 && (y + 1) % 2 === 0) {
         map[x][y] = 9;
       } else {
@@ -48,13 +53,26 @@ function generateMap(tileAmount) {
       }
     }
   }
+
   clearSpawn(map);
-  //   Wypis
-  for (var i = 0; i < 13; i++) {
-    for (var j = 0; j < 13; j++) {
-      document.write(map[i][j] + " ");
-    }
-    document.write("<br>");
-  }
+
   return map;
+}
+
+function displayMap(map) {
+    let gameTable = document.createElement("table");
+    for (let x = 0; x < mapSize; x++) {
+        let row = document.createElement("tr");
+
+        for (let y = 0; y < mapSize; y++) {
+            let cell = document.createElement("td");
+            cell.classList.add("tile-" + x + "-" + y);
+            cell.innerHTML = map[x][y];
+
+            row.appendChild(cell);
+            gameTable.appendChild(row);
+        }
+    }
+
+    gameContainer.appendChild(gameTable);
 }
