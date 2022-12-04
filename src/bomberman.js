@@ -4,12 +4,30 @@ class Tile {
     // this.isDestructable = tileType.isDestructable;
   }
 }
+let mapWhiteList = [
+  { x: 0, y: 0 },
+  { x: 0, y: 1 },
+  { x: 0, y: 2 },
+  { x: 1, y: 0 },
+  { x: 2, y: 0 },
+  { x: 12, y: 12 },
+  { x: 12, y: 11 },
+  { x: 12, y: 10 },
+  { x: 11, y: 12 },
+  { x: 10, y: 12 },
+];
 
 domReady(gameLoop);
 function gameLoop() {
   console.log("Start!");
 
   let map = generateMap(13);
+}
+
+function clearSpawn(map) {
+  mapWhiteList.forEach((element) => {
+    map[element.x][element.y] = 0;
+  });
 }
 
 function generateMap(tileAmount) {
@@ -30,6 +48,7 @@ function generateMap(tileAmount) {
       }
     }
   }
+  clearSpawn(map);
   //   Wypis
   for (var i = 0; i < 13; i++) {
     for (var j = 0; j < 13; j++) {
@@ -37,6 +56,5 @@ function generateMap(tileAmount) {
     }
     document.write("<br>");
   }
-
   return map;
 }
