@@ -1,24 +1,23 @@
 const mapSize = 13;
 let gameContainer;
 
+const tileTypes = new Map([
+  ["path", { style: "path", isDestructable: false, collision: false }],
+  ["obstacle", { style: "obstacle", isDestructable: true, collision: true }],
+  ["wall", { style: "wall", isDestructable: false, collision: true }],
+]);
+
 class Tile {
   constructor(tileType) {
     this.tileType = tileType;
-    // this.isDestructable = tileType.isDestructable;
+
+    // Load properties from tileType
+    let properties = tileTypes.get(tileType);
+    this.style = properties.style;
+    this.isDestructable = properties.isDestructable;
+    this.collision = properties.collision;
   }
 }
-let mapWhiteList = [
-  { x: 0, y: 0 },
-  { x: 0, y: 1 },
-  { x: 0, y: 2 },
-  { x: 1, y: 0 },
-  { x: 2, y: 0 },
-  { x: 12, y: 12 },
-  { x: 12, y: 11 },
-  { x: 12, y: 10 },
-  { x: 11, y: 12 },
-  { x: 10, y: 12 },
-];
 
 domReady(gameLoop);
 function gameLoop() {
@@ -29,50 +28,72 @@ function gameLoop() {
   displayMap(map);
 }
 
-function clearSpawn(map) {
-  mapWhiteList.forEach((element) => {
-    map[element.x][element.y] = 0;
-  });
-}
-
 function generateMap() {
-  // 1 dimention
+  // Creating 2 dimentional array
   let map = new Array(mapSize);
-  // Adding second dimention
   for (let i = 0; i < mapSize; i++) {
     map[i] = new Array(mapSize);
   }
 
-  // Randomize envirnoment
-  for (let x = 0; x < mapSize; x++) {
-    for (let y = 0; y < mapSize; y++) {
-      if ((x + 1) % 2 === 0 && (y + 1) % 2 === 0) {
-        map[x][y] = 9;
-      } else {
-        map[x][y] = Math.floor(Math.random() * 2);
-      }
-    }
-  }
-
+  generateTiles(map);
   clearSpawn(map);
 
   return map;
 }
 
-function displayMap(map) {
-    let gameTable = document.createElement("table");
-    for (let x = 0; x < mapSize; x++) {
-        let row = document.createElement("tr");
-
-        for (let y = 0; y < mapSize; y++) {
-            let cell = document.createElement("td");
-            cell.classList.add("tile-" + x + "-" + y);
-            cell.innerHTML = map[x][y];
-
-            row.appendChild(cell);
-            gameTable.appendChild(row);
-        }
+function generateTiles(map) {
+  for (let x = 0; x < mapSize; x++) {
+    for (let y = 0; y < mapSize; y++) {
+      if ((x + 1) % 2 === 0 && (y + 1) % 2 === 0) {
+        map[x][y] = new Tile("wall");
+      } else {
+        map[x][y] = randomTile();
+      }
     }
+  }
+}
 
-    gameContainer.appendChild(gameTable);
+function clearSpawn(map) {
+  const mapWhiteList = [
+    { x: 0, y: 0 },
+    { x: 0, y: 1 },
+    { x: 0, y: 2 },
+    { x: 1, y: 0 },
+    { x: 2, y: 0 },
+    { x: 12, y: 12 },
+    { x: 12, y: 11 },
+    { x: 12, y: 10 },
+    { x: 11, y: 12 },
+    { x: 10, y: 12 },
+  ];
+
+  mapWhiteList.forEach((element) => {
+    map[element.x][element.y] = new Tile("path");
+  });
+}
+
+function randomTile() {
+  const zero_or_one = Math.floor(Math.random() * 4);
+  return zero_or_one > 0 ? new Tile("obstacle") : new Tile("path");
+}
+
+function displayMap(map) {
+  let gameTable = document.createElement("table");
+  gameTable.id = "game-table";
+  for (let x = 0; x < mapSize; x++) {
+    let row = document.createElement("tr");
+
+    for (let y = 0; y < mapSize; y++) {
+      const tile = map[x][y];
+      let cell = document.createElement("td");
+      cell.classList.add("tile");
+      cell.classList.add("tile-" + x + "-" + y);
+      cell.classList.add("tile-" + tile.style);
+
+      row.appendChild(cell);
+      gameTable.appendChild(row);
+    }
+  }
+
+  gameContainer.appendChild(gameTable);
 }

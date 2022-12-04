@@ -1,18 +1,39 @@
-body{
-    margin: 0;
-    padding: 0;
+body {
+  margin: 0;
+  padding: 0;
 }
 
-#game-container{
-    position: absolute;
-    display: grid;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    background-color: #c4c4c4;
-    width: 40vw;
-    height: 40vw;
-    min-width: 400px;
-    min-height: 400px;
-    text-align: center;
+#game-container {
+  position: absolute;
+  display: grid;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  background-color: #c4c4c4;
+  width: 40vw;
+  height: 40vw;
+  min-width: 400px;
+  min-height: 400px;
+  text-align: center;
+}
+
+#game-table {
+  border-spacing: 1;
+}
+
+/* Tiles */
+.tile {
+  border: 0px !important;
+}
+
+.tile-path {
+  background-color: #e2e2e2;
+}
+
+.tile-obstacle {
+  background-color: #cfe262;
+}
+
+.tile-wall {
+  background-color: #303030;
 }
