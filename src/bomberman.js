@@ -5,6 +5,8 @@ const tileTypes = new Map([
   ["path", { style: "path", isDestructable: false, collision: false }],
   ["obstacle", { style: "obstacle", isDestructable: true, collision: true }],
   ["wall", { style: "wall", isDestructable: false, collision: true }],
+  ["bomb", { style: "bomb", isDestructable: false, collision: true }],
+  ["fire", { style: "fire", isDestructable: false, collision: false }],
 ]);
 
 class Tile {
