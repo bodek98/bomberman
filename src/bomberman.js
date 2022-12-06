@@ -1,5 +1,8 @@
 const mapSize = 13;
 let gameContainer;
+// let isBombPlaced = false;
+// let currentX = 5;
+// let currentY = 5;
 
 const tileTypes = new Map([
   ["path", { style: "path", isDestructable: false, collision: false }],
@@ -77,6 +80,42 @@ function clearSpawn(map) {
 function randomTile() {
   const zero_or_one = Math.floor(Math.random() * 4);
   return zero_or_one > 0 ? new Tile("obstacle") : new Tile("path");
+}
+
+function placeBomb(map) {
+  if (isBombPlaced === false) {
+    map[currentX][currentY] = new Tile("bomb");
+    setTimeout(() => {
+      explodeBomb();
+    }, 1000);
+  }
+}
+
+function explodeBomb(map) {
+  let mapFireList = [
+    { x: currentX, y: currentY },
+    { x: currentX + 1, y: currentY },
+    { x: currentX + 2, y: currentY },
+    { x: currentX + 3, y: currentY },
+    { x: currentX, y: currentY - 1 },
+    { x: currentX, y: currentY - 2 },
+    { x: currentX, y: currentY - 3 },
+  ];
+  mapFireList.forEach((element) => {
+    map[element.x][element.y] = new Tile("fire");
+  });
+  // dodać kolizje
+  isBombPlaced = false;
+  setTimeout(() => {
+    expireFire();
+  }, 1500);
+
+  function expireFire() {
+    mapFireList.forEach((element) => {
+      map[element.x][element.y] = new Tile("path");
+    });
+    // po dodaniu kolizji będzie OK
+  }
 }
 
 function displayMap(map) {
