@@ -1,8 +1,10 @@
 const mapSize = 13;
 let gameContainer;
 // let isBombPlaced = false;
-// let currentX = 5;
-// let currentY = 5;
+let redCurrentX = 0;
+let redCurrentY = 0;
+let greenCurrentX = 12;
+let greenCurrentY = 12;
 
 const tileTypes = new Map([
   ["path", { style: "path", isDestructable: false, collision: false }],
@@ -12,12 +14,29 @@ const tileTypes = new Map([
   ["fire", { style: "fire", isDestructable: false, collision: false }],
 ]);
 
+const playerTypes = new Map([
+  ["red", { style: "red", isDestructable: false, collision: false }],
+  ["green", { style: "green", isDestructable: false, collision: false }],
+]);
+
 class Tile {
   constructor(tileType) {
     this.tileType = tileType;
 
     // Load properties from tileType
     let properties = tileTypes.get(tileType);
+    this.style = properties.style;
+    this.isDestructable = properties.isDestructable;
+    this.collision = properties.collision;
+  }
+}
+
+class Player {
+  constructor(playerType) {
+    this.playerType = playerType;
+
+    // Load properties from playerType
+    let properties = playerTypes.get(playerType);
     this.style = properties.style;
     this.isDestructable = properties.isDestructable;
     this.collision = properties.collision;
@@ -42,6 +61,7 @@ function generateMap() {
 
   generateTiles(map);
   clearSpawn(map);
+  generatePlayer(map);
 
   return map;
 }
@@ -80,6 +100,13 @@ function clearSpawn(map) {
 function randomTile() {
   const zero_or_one = Math.floor(Math.random() * 4);
   return zero_or_one > 0 ? new Tile("obstacle") : new Tile("path");
+}
+
+// Player section
+
+function generatePlayer(map) {
+  map[redCurrentX][redCurrentY] = new Player("red");
+  map[greenCurrentX][greenCurrentY] = new Player("green");
 }
 
 function placeBomb(map) {
@@ -130,6 +157,9 @@ function displayMap(map) {
       cell.classList.add("tile");
       cell.classList.add("tile-" + x + "-" + y);
       cell.classList.add("tile-" + tile.style);
+
+      // Player generating
+      cell.classList.add("player-" + tile.style);
 
       row.appendChild(cell);
       gameTable.appendChild(row);
