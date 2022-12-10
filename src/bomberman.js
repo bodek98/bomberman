@@ -62,6 +62,7 @@ function generateMap() {
   generateTiles(map);
   clearSpawn(map);
   generatePlayer(map);
+  playerLogic(map);
 
   return map;
 }
@@ -105,8 +106,14 @@ function randomTile() {
 // Player section
 
 function generatePlayer(map) {
-  map[redCurrentX][redCurrentY] = new Player("red");
+  // map[redCurrentX][redCurrentY] = new Player("red");
   map[greenCurrentX][greenCurrentY] = new Player("green");
+}
+
+function playerLogic(map) {
+  redCurrentX = 2;
+  console.log(redCurrentX);
+  map[redCurrentX][redCurrentY] = new Player("red");
 }
 
 function placeBomb(map) {
@@ -148,10 +155,10 @@ function explodeBomb(map) {
 function displayMap(map) {
   let gameTable = document.createElement("table");
   gameTable.id = "game-table";
-  for (let x = 0; x < mapSize; x++) {
+  for (let y = 0; y < mapSize; y++) {
     let row = document.createElement("tr");
 
-    for (let y = 0; y < mapSize; y++) {
+    for (let x = 0; x < mapSize; x++) {
       const tile = map[x][y];
       let cell = document.createElement("td");
       cell.classList.add("tile");
