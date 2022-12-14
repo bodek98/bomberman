@@ -1,6 +1,5 @@
 const mapSize = 13;
 let gameContainer;
-// let isBombPlaced = false;
 let redCurrentX = 0;
 let redCurrentY = 0;
 let greenCurrentX = 12;
@@ -12,11 +11,6 @@ const tileTypes = new Map([
   ["wall", { style: "wall", isDestructable: false, collision: true }],
   ["bomb", { style: "bomb", isDestructable: false, collision: true }],
   ["fire", { style: "fire", isDestructable: false, collision: false }],
-]);
-
-const playerTypes = new Map([
-  ["red", { style: "red", isDestructable: false, collision: false }],
-  ["green", { style: "green", isDestructable: false, collision: false }],
 ]);
 
 class Tile {
@@ -31,6 +25,12 @@ class Tile {
   }
 }
 
+const playerTypes = new Map([
+  ["red", { style: "red" }],
+  ["green", { style: "green" }],
+  ["ghost", { style: "ghost" }],
+]);
+
 class Player {
   constructor(playerType) {
     this.playerType = playerType;
@@ -38,8 +38,13 @@ class Player {
     // Load properties from playerType
     let properties = playerTypes.get(playerType);
     this.style = properties.style;
-    this.isDestructable = properties.isDestructable;
-    this.collision = properties.collision;
+    this.position = { x: 0.0, y: 0.0 };
+  }
+
+  placeBomb(map) {
+    map[this.position.x][this.position.y] = new Tile("bomb");
+    // Add bomb handling
+    // explodeBomb(this.position.x, this.position.y);
   }
 }
 
@@ -49,6 +54,12 @@ function gameLoop() {
   gameContainer = document.getElementById("game-container");
 
   let map = generateMap(mapSize);
+
+  // Temporary explosion setup
+  let developer_ghost_player = new Player("ghost");
+  developer_ghost_player.position = { x: 6, y: 6 };
+  developer_ghost_player.placeBomb(map);
+
   displayMap(map);
 }
 
@@ -78,9 +89,7 @@ function generateTiles(map) {
   }
 }
 
-function updateMapScale(map) {
-
-}
+function updateMapScale(map) {}
 
 function clearSpawn(map) {
   const mapWhiteList = [
@@ -111,15 +120,6 @@ function randomTile() {
 function generatePlayer(map) {
   map[redCurrentX][redCurrentY] = new Player("red");
   map[greenCurrentX][greenCurrentY] = new Player("green");
-}
-
-function placeBomb(map) {
-  if (isBombPlaced === false) {
-    map[currentX][currentY] = new Tile("bomb");
-    setTimeout(() => {
-      explodeBomb();
-    }, 1000);
-  }
 }
 
 function explodeBomb(map) {
