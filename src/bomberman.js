@@ -62,7 +62,6 @@ function generateMap() {
   generateTiles(map);
   clearSpawn(map);
   generatePlayer(map);
-  playerLogic(map);
 
   return map;
 }
@@ -77,6 +76,10 @@ function generateTiles(map) {
       }
     }
   }
+}
+
+function updateMapScale(map) {
+
 }
 
 function clearSpawn(map) {
@@ -106,14 +109,8 @@ function randomTile() {
 // Player section
 
 function generatePlayer(map) {
-  // map[redCurrentX][redCurrentY] = new Player("red");
-  map[greenCurrentX][greenCurrentY] = new Player("green");
-}
-
-function playerLogic(map) {
-  redCurrentX = 2;
-  console.log(redCurrentX);
   map[redCurrentX][redCurrentY] = new Player("red");
+  map[greenCurrentX][greenCurrentY] = new Player("green");
 }
 
 function placeBomb(map) {
@@ -155,7 +152,7 @@ function explodeBomb(map) {
 function displayMap(map) {
   let gameTable = document.createElement("table");
   gameTable.id = "game-table";
-  for (let y = 0; y < mapSize; y++) {
+  for (let y = mapSize - 1; y >= 0; y--) {
     let row = document.createElement("tr");
 
     for (let x = 0; x < mapSize; x++) {
