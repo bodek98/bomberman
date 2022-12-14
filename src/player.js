@@ -17,7 +17,12 @@ class Player {
   placeBomb(map) {
     map[this.position.x][this.position.y] = new Tile("bomb");
     // Add bomb handling
-    explodeBomb(map, this.position.x, this.position.y);
+    setTimeout(() => {
+      explodeBomb(map, this.position.x, this.position.y);
+    }, 1000);
+
+    // Return bomb position to MapManager
+    return { x: this.position.x, y: this.position.y };
   }
 }
 

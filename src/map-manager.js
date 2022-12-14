@@ -78,8 +78,8 @@ class MapManager {
   }
 
   generatePlayers() {
-    this.map[0][0] = new Player("red");
-    this.map[12][12] = new Player("green");
+    // this.map[0][0] = new Player("red");
+    // this.map[12][12] = new Player("green");
   }
 
   displayMap() {
@@ -94,10 +94,7 @@ class MapManager {
         let cell = document.createElement("td");
         cell.classList.add("tile");
         cell.id = "tile-" + x + "-" + y;
-        cell.classList.add("tile-" + tile.style);
-
-        // Player generating
-        cell.classList.add("player-" + tile.style);
+        cell.classList.add("tile-style-" + tile.style);
 
         row.appendChild(cell);
         gameTable.appendChild(row);
@@ -105,5 +102,15 @@ class MapManager {
     }
 
     this.gameContainer.appendChild(gameTable);
+  }
+
+  refreshTileStyle({ x, y }) {
+    let tile = document.querySelector("#tile-" + x + "-" + y);
+    const tileInfo = this.map[x][y];
+
+    // Remove every "tile-style-*" class
+    const tileClassesRegex = new RegExp(/(\btile-style.*)/, "g");
+    tile.className = tile.className.replace(tileClassesRegex, "");
+    tile.classList.add("tile-style-" + tileInfo.style);
   }
 }

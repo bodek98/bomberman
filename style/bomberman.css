@@ -38,18 +38,18 @@ body {
   /* box-shadow: 0px 0px 1px 1px rgb(228, 228, 228) inset; */
 }
 
-.tile-path {
+.tile-style-path {
   background-color: #ffffff;
 }
 
-.tile-obstacle {
+.tile-style-obstacle {
   background-color: #2f82ff;
 }
 
-.tile-wall {
+.tile-style-wall {
   background-color: #363636;
 }
-.tile-bomb {
+.tile-style-bomb {
   background-image: url("../bomb.png");
   background-repeat: no-repeat;
   background-size: 100%, 100%;
