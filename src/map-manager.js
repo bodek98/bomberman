@@ -7,11 +7,11 @@ const tileTypes = new Map([
 ]);
 
 class Tile {
-  constructor(tileType) {
-    this.tileType = tileType;
+  constructor(_tileType) {
+    this.tileType = _tileType;
 
     // Load properties from tileType
-    let properties = tileTypes.get(tileType);
+    let properties = tileTypes.get(this.tileType);
     this.style = properties.style;
     this.isDestructable = properties.isDestructable;
     this.collision = properties.collision;
@@ -19,30 +19,33 @@ class Tile {
 }
 
 class MapManager {
-  constructor(mapSize = 13) {
-    this.map = this.generateMap(mapSize);
+  constructor(_mapSize = 13) {
+    this.map = {};
+    this.mapSize = _mapSize;
+    this.gameContainer = document.getElementById("game-container");
+    this.generateMap(this.mapSize);
+    this.displayMap();
   }
 
-  generateMap(mapSize) {
+  generateMap() {
     // Creating 2 dimentional array
-    let map = new Array(mapSize);
-    for (let i = 0; i < mapSize; i++) {
-      map[i] = new Array(mapSize);
+    this.map = new Array(this.mapSize);
+    for (let i = 0; i < this.mapSize; i++) {
+      this.map[i] = new Array(this.mapSize);
     }
 
-    this.generateTiles(map);
-    this.clearSpawn(map);
-
-    return map;
+    this.generateTiles();
+    this.clearSpawn();
+    this.generatePlayers();
   }
 
-  generateTiles(map) {
-    for (let x = 0; x < mapSize; x++) {
-      for (let y = 0; y < mapSize; y++) {
+  generateTiles() {
+    for (let x = 0; x < this.mapSize; x++) {
+      for (let y = 0; y < this.mapSize; y++) {
         if ((x + 1) % 2 === 0 && (y + 1) % 2 === 0) {
-          map[x][y] = new Tile("wall");
+          this.map[x][y] = new Tile("wall");
         } else {
-          map[x][y] = this.randomTile();
+          this.map[x][y] = this.randomTile();
         }
       }
     }
@@ -53,9 +56,9 @@ class MapManager {
     return zero_or_one > 0 ? new Tile("obstacle") : new Tile("path");
   }
 
-  updateMapScale(map) {}
+  updateMapScale() {}
 
-  clearSpawn(map) {
+  clearSpawn() {
     const mapWhiteList = [
       { x: 0, y: 0 },
       { x: 0, y: 1 },
@@ -70,7 +73,37 @@ class MapManager {
     ];
 
     mapWhiteList.forEach((element) => {
-      map[element.x][element.y] = new Tile("path");
+      this.map[element.x][element.y] = new Tile("path");
     });
+  }
+
+  generatePlayers() {
+    this.map[0][0] = new Player("red");
+    this.map[12][12] = new Player("green");
+  }
+
+  displayMap() {
+    let gameTable = document.createElement("table");
+    gameTable.id = "game-table";
+
+    for (let y = this.mapSize - 1; y >= 0; y--) {
+      let row = document.createElement("tr");
+
+      for (let x = 0; x < this.mapSize; x++) {
+        const tile = this.map[x][y];
+        let cell = document.createElement("td");
+        cell.classList.add("tile");
+        cell.id = "tile-" + x + "-" + y;
+        cell.classList.add("tile-" + tile.style);
+
+        // Player generating
+        cell.classList.add("player-" + tile.style);
+
+        row.appendChild(cell);
+        gameTable.appendChild(row);
+      }
+    }
+
+    this.gameContainer.appendChild(gameTable);
   }
 }
