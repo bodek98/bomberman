@@ -56,7 +56,26 @@ class MapManager {
     return zero_or_one > 0 ? new Tile("obstacle") : new Tile("path");
   }
 
-  updateMapScale() {}
+  // Scalling is needed so we can use PX as a stable, never changing game dimention unit
+  // Game will always be 1000 x 1000 [px] internally, regardless it's final size in the viewport
+  updateMapScale() {
+    const smaller_dimention = Math.min(window.innerWidth, window.innerHeight);
+    const normalized_size =
+      smaller_dimention > 1000 ? 1 : smaller_dimention / 1000;
+
+    const ratio = 0.8;
+    const final_scale = normalized_size * ratio;
+    const final_size = final_scale * 1000;
+
+    const final_size_half = final_size / 2;
+    const scale_margin = (1000 - final_size) / 2;
+    const margin = -(final_size_half + scale_margin);
+
+    this.gameContainer.style.top = window.innerHeight / 2 + margin + "px";
+    this.gameContainer.style.left = window.innerWidth / 2 + margin + "px";
+
+    this.gameContainer.style.transform = "scale(" + final_scale + ")";
+  }
 
   clearSpawn() {
     const mapWhiteList = [
