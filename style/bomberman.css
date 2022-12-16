@@ -58,13 +58,19 @@ body {
   z-index: 999;
 }
 
-.player-green {
+.player {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+#player-green {
   background-image: url("../Player green.png");
   background-repeat: no-repeat;
   background-size: 100%, 100%;
 }
 
-.player-red {
+#player-red {
   background-image: url("../Player red.png");
   background-repeat: no-repeat;
   background-size: 100%, 100%;

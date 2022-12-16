@@ -37,7 +37,6 @@ class MapManager {
 
     this.generateTiles();
     this.clearSpawn();
-    this.generatePlayers();
   }
 
   generateTiles() {
@@ -97,11 +96,6 @@ class MapManager {
     mapWhiteList.forEach((element) => {
       this.map[element.x][element.y] = new Tile("path");
     });
-  }
-
-  generatePlayers() {
-    // this.map[0][0] = new Player("red");
-    // this.map[12][12] = new Player("green");
   }
 
   displayMap() {

@@ -1,16 +1,22 @@
 domReady(mainGame);
 function mainGame() {
   const mapSize = 13;
-  let mapManager = new MapManager(mapSize);
+  let game = new Game();
+  game.mapManager = new MapManager(mapSize);
 
-  mapManager.updateMapScale();
+  game.mapManager.updateMapScale();
   window.addEventListener("resize", () => {
-    mapManager.updateMapScale();
+    game.mapManager.updateMapScale();
   });
 
   // Temporary explosion setup
-  let developer_ghost_player = new Player("ghost");
-  developer_ghost_player.position = { x: 6, y: 6 };
-  bomb_position = developer_ghost_player.placeBomb(mapManager.map);
-  mapManager.refreshTileStyle(bomb_position);
+  {
+    let ghostElement = document.createElement("div");
+    let developer_ghost_player = new Player(ghostElement, 6, 6);
+    bomb_position = developer_ghost_player.placeBomb(game.mapManager.map);
+    game.mapManager.refreshTileStyle(bomb_position);
+  }
+
+  game.generateStandardPlayers();
+  game.mainLoop();
 }

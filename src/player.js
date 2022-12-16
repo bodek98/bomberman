@@ -1,17 +1,9 @@
-const playerTypes = new Map([
-  ["red", { style: "red" }],
-  ["green", { style: "green" }],
-  ["ghost", { style: "ghost" }],
-]);
-
 class Player {
-  constructor(_playerType) {
-    this.playerType = _playerType;
+  constructor(_playerElement, _x = 0, _y = 0) {
+    this.playerElement = _playerElement;
+    this.position = { x: _x, y: _y };
 
-    // Load properties from playerType
-    let properties = playerTypes.get(this.playerType);
-    this.style = properties.style;
-    this.position = { x: 0.0, y: 0.0 };
+    this.updatePosition();
   }
 
   placeBomb(map) {
@@ -23,6 +15,13 @@ class Player {
 
     // Return bomb position to MapManager
     return { x: this.position.x, y: this.position.y };
+  }
+
+  updatePosition() {
+    console.log(this.playerElement);
+    console.log(this.position);
+    this.playerElement.style.bottom = this.position.x * 100 + "px";
+    this.playerElement.style.left = this.position.y * 100 + "px";
   }
 }
 
