@@ -22,6 +22,7 @@ class MapManager {
   constructor(_mapSize = 13) {
     this.map = {};
     this.mapSize = _mapSize;
+    this.mapDimentionLength = this.mapSize * 100;
     this.gameContainer = document.getElementById("game-container");
     this.generateMap(this.mapSize);
     this.displayMap();
@@ -61,14 +62,16 @@ class MapManager {
   updateMapScale() {
     const smaller_dimention = Math.min(window.innerWidth, window.innerHeight);
     const normalized_size =
-      smaller_dimention > 1000 ? 1 : smaller_dimention / 1000;
+      smaller_dimention > this.mapDimentionLength
+        ? 1
+        : smaller_dimention / this.mapDimentionLength;
 
     const ratio = 0.8;
     const final_scale = normalized_size * ratio;
     const final_size = final_scale * 1000;
 
     const final_size_half = final_size / 2;
-    const scale_margin = (1000 - final_size) / 2;
+    const scale_margin = (this.mapDimentionLength - final_size) / 2;
     const margin = -(final_size_half + scale_margin);
 
     this.gameContainer.style.top = window.innerHeight / 2 + margin + "px";
@@ -120,6 +123,8 @@ class MapManager {
       }
     }
 
+    this.gameContainer.style.width = this.mapDimentionLength + "px";
+    this.gameContainer.style.height = this.mapDimentionLength + "px";
     this.gameContainer.appendChild(gameTable);
   }
 
