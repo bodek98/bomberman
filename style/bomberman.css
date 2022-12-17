@@ -43,11 +43,7 @@ body {
 .tile-style-wall {
   background-color: #363636;
 }
-.tile-style-bomb {
-  background-image: url("../bomb.png");
-  background-repeat: no-repeat;
-  background-size: 100%, 100%;
-}
+
 .tile-fire {
   position: absolute;
   top: 0;
@@ -58,10 +54,16 @@ body {
   z-index: 999;
 }
 
-.player {
+.actor {
   width: 100px;
   height: 100px;
   position: absolute;
+}
+
+.bomb {
+  background-image: url("../bomb.png");
+  background-repeat: no-repeat;
+  background-size: 100%, 100%;
 }
 
 #player-green {
