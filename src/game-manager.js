@@ -40,6 +40,7 @@ class Game {
       });
     }
 
+    console.log("frame");
     updateTiles(tileUpdateList);
   }
 }
