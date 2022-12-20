@@ -61,19 +61,19 @@ body {
 }
 
 .bomb {
-  background-image: url("../bomb.png");
+  background-image: url("../img/bomb.png");
   background-repeat: no-repeat;
   background-size: 100%, 100%;
 }
 
 #player-green {
-  background-image: url("../Player green.png");
+  background-image: url("../img/Player green.png");
   background-repeat: no-repeat;
   background-size: 100%, 100%;
 }
 
 #player-red {
-  background-image: url("../Player red.png");
+  background-image: url("../img/Player red.png");
   background-repeat: no-repeat;
   background-size: 100%, 100%;
 }
