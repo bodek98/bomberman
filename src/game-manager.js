@@ -30,15 +30,26 @@ class Game {
     const frameTime = 1000 / frameRate;
 
     // Execute gameStep function 60 times a second
-    setInterval(this.gameStep, frameTime, this.tilesToUpdate, this.mapManager);
+    setInterval(
+      this.gameStep,
+      frameTime,
+      this.tilesToUpdate,
+      this.mapManager,
+      this.players
+    );
   }
 
-  gameStep(tileUpdateList, mapManager) {
+  gameStep(tileUpdateList, mapManager, players) {
     function updateTiles(tileUpdateList) {
       tileUpdateList.forEach((tile) => {
         mapManager.refreshTileStyle(tile);
       });
     }
+
+    players.forEach((player) => {
+      player.step(mapManager.map);
+      player.updatePositionCSS();
+    });
 
     console.log("frame");
     updateTiles(tileUpdateList);

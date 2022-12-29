@@ -95,6 +95,6 @@ class Bomb extends Actor {
   withdrawBombFromMap() {
     this.position.x = -1;
     this.position.y = -1;
-    this.updatePosition();
+    this.updatePositionCSS();
   }
 }
