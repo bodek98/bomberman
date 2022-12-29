@@ -51,7 +51,7 @@ class Game {
       player.updatePositionCSS();
     });
 
-    console.log("frame");
+    // console.log("frame");
     updateTiles(tileUpdateList);
   }
 }
