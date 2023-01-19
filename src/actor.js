@@ -7,8 +7,13 @@ class Actor {
     this.updatePositionCSS();
   }
 
+  setPosition(x, y) {
+    this.position.x = x;
+    this.position.y = y;
+  }
+
   updatePositionCSS() {
-    this.element.style.bottom = this.position.x * 100 + "px";
-    this.element.style.left = this.position.y * 100 + "px";
+    this.element.style.bottom = this.position.y * 100 + "px";
+    this.element.style.left = this.position.x * 100 + "px";
   }
 }

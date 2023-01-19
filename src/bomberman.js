@@ -24,5 +24,8 @@ function mainGame() {
   }
 
   game.generateStandardPlayers();
-  game.mainLoop();
+
+  // Start the game by requesting first frame
+  // Every frame calls next one to be generated
+  window.requestAnimationFrame(() => game.mainLoopStep());
 }

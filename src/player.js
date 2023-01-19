@@ -1,16 +1,20 @@
 class Player extends Actor {
   constructor(_element, _x = 0, _y = 0, gameContainer) {
     super(_element, _x, _y);
-    this.element.classList.add("player");
 
+    // HTML construction
+    this.element.classList.add("player");
     let bombElement = document.createElement("div");
     gameContainer.appendChild(bombElement);
-    this.bomb = new Bomb(bombElement, -1, -1);
 
+    this.lastPosition = { x: _x, y: _y };
     this.direction = { x: 0, y: 0 };
-    this.traveledDistance = { x: 0, y: 0 };
-    this.movementSpeed = 2;
-    this.isDestinationReached = true;
+
+    // Determines how many FPS will take to move 1 tile
+    this.animationLength = FRAMERATE;
+    this.traveledFrames = 0;
+
+    this.bomb = new Bomb(bombElement, -1, -1);
   }
 
   placeBomb(map) {
@@ -27,61 +31,106 @@ class Player extends Actor {
     this.bomb.updatePositionCSS();
   }
 
+  lerp(progress, base, target) {
+    let diff = target - base;
+    return base + diff * progress;
+  }
+
   step(map) {
-    // If full step was achieved
+    this.traveledFrames++;
+    this.changePosition(map);
+  }
 
-    if (
-      Math.abs(this.traveledDistance.x) >= 1 ||
-      Math.abs(this.traveledDistance.y) >= 1
-    ) {
-      this.traveledDistance.x = 0;
-      this.traveledDistance.y = 0;
-      this.isDestinationReached = true;
-    }
+  changePosition(map) {
+    // Percentage (0.0 -> 1.0) of travel
+    let progress = this.traveledFrames / this.animationLength;
 
-    if (this.isDestinationReached) {
+    // If step full step was achieved, or no direction is set
+    if (progress >= 1 || this.isDirectionNotSet()) {
+      this.traveledFrames = 0;
+      progress = 0;
+
+      this.lastPosition.x += this.direction.x;
+      this.lastPosition.y += this.direction.y;
+
       this.setNewDirection(map);
-      this.isDestinationReached = false;
-      alert("stop");
     }
 
-    let stepX = (this.direction.x / 60) * this.movementSpeed;
-    let stepY = (this.direction.y / 60) * this.movementSpeed;
-    this.traveledDistance.x += stepX;
-    this.traveledDistance.y += stepY;
-    this.position.x += stepX;
-    this.position.y += stepY;
+    const newX = this.lerp(
+      progress,
+      this.lastPosition.x,
+      this.lastPosition.x + this.direction.x
+    );
+    const newY = this.lerp(
+      progress,
+      this.lastPosition.y,
+      this.lastPosition.y + this.direction.y
+    );
+
+    this.setPosition(newX, newY);
   }
 
   setNewDirection(map) {
-    let player = this;
-    console.log("setting new direction");
+    let possibleDirections = this.getPossibleDirections(map);
+    this.removePreviousPositionFromDirections(possibleDirections);
 
-    let possibleDirections = [];
-    function loadPossibleDirections() {
-      const allDirections = [
-        { x: 1, y: 0 },
-        { x: -1, y: 0 },
-        { x: 0, y: 1 },
-        { x: 0, y: -1 },
-      ];
-      allDirections.forEach((direction) => {
-        const nextX = Math.floor(player.position.x + direction.x);
-        const nextY = Math.floor(player.position.y + direction.y);
-        const isExceeding = nextX > 12 || nextY > 12 || nextX < 0 || nextY < 0;
-        if (!isExceeding) {
-          if (map[nextX][nextY].tileType === "path") {
-            possibleDirections.push(direction);
-          }
-        }
-      });
-    }
+    const randomIndex = Math.floor(Math.random() * possibleDirections.length);
+    let randomDirection = possibleDirections[randomIndex];
 
-    loadPossibleDirections();
-    let randomDirection =
-      possibleDirections[Math.floor(Math.random() * possibleDirections.length)];
-
-    console.log(this.position.x, this.position.y);
     this.direction = randomDirection;
+  }
+
+  allDirections = [
+    { x: 1, y: 0 },
+    { x: -1, y: 0 },
+    { x: 0, y: 1 },
+    { x: 0, y: -1 },
+  ];
+
+  getPossibleDirections(map) {
+    let player = this;
+    let possibleDirections = [];
+
+    const currentX = Math.round(player.position.x);
+    const currentY = Math.round(player.position.y);
+
+    this.allDirections.forEach((direction) => {
+      const nextX = currentX + direction.x;
+      const nextY = currentY + direction.y;
+      const isExceeding = nextX > 12 || nextY > 12 || nextX < 0 || nextY < 0;
+      if (!isExceeding) {
+        if (map[nextX][nextY].tileType === "path") {
+          possibleDirections.push(direction);
+        }
+      }
+    });
+
+    return possibleDirections;
+  }
+
+  isDirectionNotSet() {
+    return this.direction == 0 && this.direction == 0;
+  }
+
+  removePreviousPositionFromDirections(possibleDirections) {
+    // At this point this.direction is still an old, not updated value
+    // Invertion of it would look like "step-back"
+    // And we want to remove it from possible positions
+    const stepBack = { x: this.direction.x * -1, y: this.direction.y * -1 };
+
+    const index = this.indexOfDirection(possibleDirections, stepBack);
+    // If index was found, and there are other possible directions than going back
+    if (typeof index == "number" && possibleDirections.length > 1) {
+      possibleDirections.splice(index, 1);
+    }
+  }
+
+  indexOfDirection(directions, stepBack) {
+    for (let index = 0; index < directions.length; index++) {
+      const direction = directions[index];
+      if (direction.x == stepBack.x && direction.y == stepBack.y) {
+        return index;
+      }
+    }
   }
 }

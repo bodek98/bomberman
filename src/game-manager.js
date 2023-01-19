@@ -25,33 +25,26 @@ class Game {
     );
   }
 
-  mainLoop() {
-    const frameRate = 60;
-    const frameTime = 1000 / frameRate;
-
-    // Execute gameStep function 60 times a second
-    setInterval(
-      this.gameStep,
-      frameTime,
-      this.tilesToUpdate,
-      this.mapManager,
-      this.players
-    );
+  mainLoopStep() {
+    this.gameStep();
+    window.requestAnimationFrame(() => this.mainLoopStep());
   }
 
-  gameStep(tileUpdateList, mapManager, players) {
-    function updateTiles(tileUpdateList) {
-      tileUpdateList.forEach((tile) => {
-        mapManager.refreshTileStyle(tile);
-      });
-    }
+  gameStep() {
+    // Reference because "this." is not working inside lambdas
+    let r_mapManager = this.mapManager;
 
-    players.forEach((player) => {
-      player.step(mapManager.map);
+    // Update players
+    this.players.forEach((player) => {
+      player.step(r_mapManager.map);
       player.updatePositionCSS();
     });
 
-    // console.log("frame");
-    updateTiles(tileUpdateList);
+    // Update tiles
+    if (!this.tileUpdateList) return;
+
+    this.tileUpdateList.forEach((tile) => {
+      r_mapManager.refreshTileStyle(tile);
+    });
   }
 }
