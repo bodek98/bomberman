@@ -63,9 +63,9 @@ class Game {
     });
 
     // Update tiles
-    if (!this.tileUpdateList) return;
+    if (!this.tilesToUpdate) return;
 
-    this.tileUpdateList.forEach((tile) => {
+    this.tilesToUpdate.forEach((tile) => {
       r_mapManager.refreshTileStyle(tile);
     });
   }
