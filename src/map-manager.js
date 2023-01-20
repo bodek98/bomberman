@@ -19,7 +19,7 @@ class Tile {
 }
 
 class MapManager {
-  constructor(_mapSize = 13) {
+  constructor(_mapSize = MAP_SIZE) {
     this.map = {};
     this.mapSize = _mapSize;
     this.mapDimentionLength = this.mapSize * 100;

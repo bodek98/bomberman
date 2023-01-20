@@ -55,10 +55,11 @@ class Game {
   gameStep() {
     // Reference because "this." is not working inside lambdas
     let r_mapManager = this.mapManager;
+    let r_tilesToUpdate = this.tilesToUpdate;
 
     // Update players
     this.players.forEach((player) => {
-      player.step(r_mapManager.map);
+      player.step(r_mapManager.map, r_tilesToUpdate);
       player.updatePositionCSS();
     });
 

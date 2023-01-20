@@ -17,6 +17,12 @@ class Player extends Actor {
     this.bomb = new Bomb(bombElement, -1, -1);
   }
 
+  moveBombToPlayer() {
+    this.bomb.position.x = this.position.x;
+    this.bomb.position.y = this.position.y;
+    this.bomb.updatePositionCSS();
+  }
+
   placeBomb(map) {
     // Move bomb to player position
     this.moveBombToPlayer();
@@ -25,10 +31,9 @@ class Player extends Actor {
     return explodedTiles;
   }
 
-  moveBombToPlayer() {
-    this.bomb.position.x = this.position.x;
-    this.bomb.position.y = this.position.y;
-    this.bomb.updatePositionCSS();
+  manageBomb(map, tilesToUpdate) {
+    const tilesToExplode = this.placeBomb(map);
+    tilesToUpdate = tilesToUpdate.concat(tilesToExplode);
   }
 
   lerp(progress, base, target) {
@@ -97,7 +102,7 @@ class Player extends Actor {
     this.allDirections.forEach((direction) => {
       const nextX = currentX + direction.x;
       const nextY = currentY + direction.y;
-      const isExceeding = nextX > 12 || nextY > 12 || nextX < 0 || nextY < 0;
+      const isExceeding = isOutOfBounds(nextX, nextY);
       if (!isExceeding) {
         if (map[nextX][nextY].tileType === "path") {
           possibleDirections.push(direction);

@@ -1,8 +1,7 @@
 domReady(mainGame);
 function mainGame() {
-  const mapSize = 13;
   let game = new Game();
-  game.mapManager = new MapManager(mapSize);
+  game.mapManager = new MapManager();
 
   game.mapManager.updateMapScale();
   window.addEventListener("resize", () => {
@@ -13,8 +12,8 @@ function mainGame() {
   {
     let developer_ghost_player = new Player(
       document.createElement("div"),
-      6,
-      6,
+      12,
+      0,
       game.mapManager.gameContainer
     );
     let explodedTiles = developer_ghost_player.placeBomb(game.mapManager.map);

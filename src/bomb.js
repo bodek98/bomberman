@@ -7,15 +7,21 @@ class Bomb extends Actor {
   }
 
   explode(map) {
-    const mapSize = 13;
+    const explosionCoordinates = this.calculateExplosion(map);
+    this.triggerExplosion(map, explosionCoordinates);
+
+    return explosionCoordinates;
+  }
+
+  calculateExplosion(map) {
     const fireLenght = 3;
 
     let bombX = this.position.x;
-    let bombY = this.position.x;
+    let bombY = this.position.y;
     let explosionCoordinates = [];
 
     function expandFire(nextX, nextY) {
-      if (!isOutOfBounds(nextX, nextY, mapSize)) {
+      if (!isOutOfBounds(nextX, nextY)) {
         if (map[nextX][nextY].tileType === "wall") {
           return false;
         } else {
@@ -56,6 +62,10 @@ class Bomb extends Actor {
       }
     }
 
+    return explosionCoordinates;
+  }
+
+  triggerExplosion(map, explosionCoordinates) {
     // Explosion timeout
     setTimeout(() => {
       explosionCoordinates.forEach((coord) => {
@@ -68,8 +78,6 @@ class Bomb extends Actor {
         this.clearExplosion();
       }, 1000);
     }, 1000);
-
-    return explosionCoordinates;
   }
 
   createFireTile(x, y) {

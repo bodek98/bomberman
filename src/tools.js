@@ -1,5 +1,6 @@
 const FRAMERATE = 60;
 const FRAMETIME_MS = 1000 / 60;
+const MAP_SIZE = 13;
 
 // Ensuring that JS is being run only after DOM is loaded
 function domReady(fn) {
@@ -14,9 +15,9 @@ function domReady(fn) {
   }
 }
 
-function isOutOfBounds(x, y, mapSize) {
-  const isX = x < 0 || x >= mapSize;
-  const isY = y < 0 || y >= mapSize;
+function isOutOfBounds(x, y) {
+  const isX = x < 0 || x >= MAP_SIZE;
+  const isY = y < 0 || y >= MAP_SIZE;
 
   return isX || isY;
 }
