@@ -1,4 +1,5 @@
 const FRAMERATE = 60;
+const FRAMETIME_MS = 1000 / 60;
 
 // Ensuring that JS is being run only after DOM is loaded
 function domReady(fn) {
