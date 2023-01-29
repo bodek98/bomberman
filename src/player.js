@@ -18,8 +18,9 @@ class Player extends Actor {
   }
 
   moveBombToPlayer() {
-    this.bomb.position.x = this.position.x;
-    this.bomb.position.y = this.position.y;
+    this.bomb.position.x = Math.round(this.position.x);
+    this.bomb.position.y = Math.round(this.position.y);
+    this.bomb.isOnTheMap = true;
     this.bomb.updatePositionCSS();
   }
 
@@ -31,9 +32,15 @@ class Player extends Actor {
     return explodedTiles;
   }
 
-  manageBomb(map, tilesToUpdate) {
-    const tilesToExplode = this.placeBomb(map);
-    tilesToUpdate = tilesToUpdate.concat(tilesToExplode);
+  manageBomb(map) {
+    if (this.bomb.isOnTheMap) return [];
+
+    if (Math.random() * 250 < 1) {
+      const tilesToExplode = this.placeBomb(map);
+      return tilesToExplode;
+    }
+
+    return [];
   }
 
   lerp(progress, base, target) {

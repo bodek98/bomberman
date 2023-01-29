@@ -54,20 +54,31 @@ class Game {
 
   gameStep() {
     // Reference because "this." is not working inside lambdas
-    let r_mapManager = this.mapManager;
-    let r_tilesToUpdate = this.tilesToUpdate;
+    let r = this;
 
+    let freshlyUpdatedTiles = [];
     // Update players
     this.players.forEach((player) => {
-      player.step(r_mapManager.map, r_tilesToUpdate);
+      player.step(r.mapManager.map);
       player.updatePositionCSS();
+
+      freshlyUpdatedTiles = freshlyUpdatedTiles.concat(
+        player.manageBomb(r.mapManager.map)
+      );
     });
+
+    this.tilesToUpdate = this.tilesToUpdate.concat(freshlyUpdatedTiles);
 
     // Update tiles
-    if (!this.tilesToUpdate) return;
+    if (this.tilesToUpdate.length == 0) return;
 
     this.tilesToUpdate.forEach((tile) => {
-      r_mapManager.refreshTileStyle(tile);
+      // Set timeout of map update, to match map changes with bomb animations
+      setTimeout(() => {
+        r.mapManager.refreshTileStyle(tile);
+      }, EXPLOSION_TIMEOUT);
     });
+
+    this.tilesToUpdate = [];
   }
 }

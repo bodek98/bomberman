@@ -4,6 +4,7 @@ class Bomb extends Actor {
     this.element.classList.add("bomb");
 
     this.fireTileElements = [];
+    this.isOnTheMap = false;
   }
 
   explode(map) {
@@ -16,8 +17,8 @@ class Bomb extends Actor {
   calculateExplosion(map) {
     const fireLenght = 3;
 
-    let bombX = this.position.x;
-    let bombY = this.position.y;
+    let bombX = Math.round(this.position.x);
+    let bombY = Math.round(this.position.y);
     let explosionCoordinates = [];
 
     function expandFire(nextX, nextY) {
@@ -76,8 +77,8 @@ class Bomb extends Actor {
       setTimeout(() => {
         this.withdrawBombFromMap();
         this.clearExplosion();
-      }, 1000);
-    }, 1000);
+      }, EXPLOSION_DURATION);
+    }, EXPLOSION_TIMEOUT);
   }
 
   createFireTile(x, y) {
@@ -103,6 +104,7 @@ class Bomb extends Actor {
   withdrawBombFromMap() {
     this.position.x = -1;
     this.position.y = -1;
+    this.isOnTheMap = false;
     this.updatePositionCSS();
   }
 }

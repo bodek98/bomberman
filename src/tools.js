@@ -1,6 +1,8 @@
 const FRAMERATE = 60;
 const FRAMETIME_MS = 1000 / 60;
 const MAP_SIZE = 13;
+const EXPLOSION_TIMEOUT = 2500;
+const EXPLOSION_DURATION = 1000;
 
 // Ensuring that JS is being run only after DOM is loaded
 function domReady(fn) {
