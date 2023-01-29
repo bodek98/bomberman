@@ -47,6 +47,10 @@ body {
   background-color: #363636;
 }
 
+.tile-style-fire {
+  background-color: #ff811b;
+}
+
 .tile-fire {
   position: absolute;
   top: 0;

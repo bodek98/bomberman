@@ -70,35 +70,24 @@ class Bomb extends Actor {
     // Explosion timeout
     setTimeout(() => {
       explosionCoordinates.forEach((coord) => {
-        this.createFireTile(coord.x, coord.y);
-        this.explodeObstacle(map, coord.x, coord.y);
+        this.setTileFire(map, coord.x, coord.y);
       });
       // Clear explosion timeout
       setTimeout(() => {
         this.withdrawBombFromMap();
-        this.clearExplosion();
+        explosionCoordinates.forEach((coord) => {
+          this.setTilePath(map, coord.x, coord.y);
+        });
       }, EXPLOSION_DURATION);
     }, EXPLOSION_TIMEOUT);
   }
 
-  createFireTile(x, y) {
-    let parent = document.querySelector("#tile-" + x + "-" + y);
-    let fireTile = document.createElement("div");
-    fireTile.classList.add("tile-fire");
-    fireTile.classList.add(this.id);
-
-    this.fireTileElements.push(fireTile);
-    parent.appendChild(fireTile);
+  setTileFire(map, x, y) {
+    map[x][y] = new Tile("fire");
   }
 
-  explodeObstacle(map, x, y) {
+  setTilePath(map, x, y) {
     map[x][y] = new Tile("path");
-  }
-
-  clearExplosion() {
-    this.fireTileElements.forEach((element) => {
-      element.remove();
-    });
   }
 
   withdrawBombFromMap() {

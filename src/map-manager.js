@@ -126,6 +126,9 @@ class MapManager {
     let tile = document.querySelector("#tile-" + x + "-" + y);
     const tileInfo = this.map[x][y];
 
+    if (tileInfo.style == "fire") {
+      console.log("fire");
+    }
     // Remove every "tile-style-*" class
     const tileClassesRegex = new RegExp(/(\btile-style.*)/, "g");
     tile.className = tile.className.replace(tileClassesRegex, "");

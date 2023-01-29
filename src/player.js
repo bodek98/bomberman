@@ -113,6 +113,8 @@ class Player extends Actor {
       if (!isExceeding) {
         if (map[nextX][nextY].tileType === "path") {
           possibleDirections.push(direction);
+        } else if (map[nextX][nextY].tileType === "fire") {
+          possibleDirections.push(direction);
         }
       }
     });

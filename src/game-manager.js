@@ -76,6 +76,9 @@ class Game {
       // Set timeout of map update, to match map changes with bomb animations
       setTimeout(() => {
         r.mapManager.refreshTileStyle(tile);
+        setTimeout(() => {
+          r.mapManager.refreshTileStyle(tile);
+        }, EXPLOSION_DURATION);
       }, EXPLOSION_TIMEOUT);
     });
 
