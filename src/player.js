@@ -17,6 +17,10 @@ class Player extends Actor {
     this.traveledFrames = 0;
 
     this.bomb = new Bomb(bombElement, -1, -1);
+
+    const date = new Date();
+    this.damageDeltaTime = date.getTime();
+    this.damageLastTime = 0;
   }
 
   getDamage() {
@@ -58,6 +62,23 @@ class Player extends Actor {
   step(map) {
     this.traveledFrames++;
     this.changePosition(map);
+    this.checkIfOnFire(map);
+  }
+
+  checkIfOnFire(map) {
+    const playerTileX = Math.round(this.position.x);
+    const playerTileY = Math.round(this.position.y);
+
+    const date = new Date();
+    this.damageDeltaTime = date.getTime() - this.damageLastTime;
+
+    if (map[playerTileX][playerTileY].tileType == "fire") {
+      if (this.damageDeltaTime >= EXPLOSION_DURATION) {
+        this.getDamage();
+
+        this.damageLastTime = date.getTime();
+      }
+    }
   }
 
   changePosition(map) {
