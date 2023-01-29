@@ -122,3 +122,41 @@ body {
 #red-player-score-icon {
   background-image: url("../img/Player red.png");
 }
+
+/* Game-Over */
+
+#game-over {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 1s ease-in-out;
+}
+#game-over.active {
+  transition: all 1s ease-in-out;
+  opacity: 1;
+  position: absolute;
+}
+
+#game-over-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #1d1d1d;
+}
+
+#game-over-board {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  color: #fff;
+  font-size: 4vw;
+}
+
+#game-over-loser {
+  width: 100px;
+  height: 100px;
+}

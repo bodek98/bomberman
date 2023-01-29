@@ -11,6 +11,7 @@ class Player extends Actor {
     this.lastPosition = { x: _x, y: _y };
     this.direction = { x: 0, y: 0 };
     this.health = 10;
+    this.scoreElement.innerHTML = this.health;
 
     // Determines how many FPS will take to move 1 tile
     this.animationLength = FRAMERATE;

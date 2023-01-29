@@ -6,6 +6,8 @@ class Game {
     this.lastTime = 0;
     this.timeDelta = 0;
     this.frameDelay = 0;
+    this.isEnded;
+    this.loserElement;
   }
 
   generateStandardPlayers() {
@@ -36,12 +38,39 @@ class Game {
   }
 
   mainLoopStep() {
+    this.isEnded = this.checkGameEndRules();
+
+    if (this.isEnded) {
+      this.showGameOverScreen();
+      return;
+    }
+
     this.gameStep();
 
     // Locks the game at max. 60 FPS
     this.calcualteFrameDelay();
 
     window.requestAnimationFrame(() => this.mainLoopStep());
+  }
+
+  checkGameEndRules() {
+    let shouldGameEnd = false;
+
+    this.players.forEach((player) => {
+      if (player.health <= 0) {
+        shouldGameEnd = true;
+        this.loserElement = player.element;
+      }
+    });
+
+    return shouldGameEnd;
+  }
+
+  showGameOverScreen() {
+    document.getElementById("game-over").classList.add("active");
+
+    this.loserElement.style = "";
+    document.getElementById("game-over-loser").appendChild(this.loserElement);
   }
 
   calcualteFrameDelay() {
