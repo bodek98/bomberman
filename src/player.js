@@ -68,6 +68,10 @@ class Player extends Actor {
       this.setNewDirection(map);
     }
 
+    if (!this.direction) {
+      this.setNewDirection(map);
+    }
+
     const newX = this.lerp(
       progress,
       this.lastPosition.x,
@@ -100,6 +104,18 @@ class Player extends Actor {
   ];
 
   getPossibleDirections(map) {
+    let possibleDirections = [];
+    possibleDirections = this.getPossibleDirectionsOfTile(map, "path");
+
+    // If there is no clear path to go, choose fire
+    if (possibleDirections.length == 0) {
+      possibleDirections = this.getPossibleDirectionsOfTile(map, "fire");
+    }
+
+    return possibleDirections;
+  }
+
+  getPossibleDirectionsOfTile(map, tileType) {
     let player = this;
     let possibleDirections = [];
 
@@ -111,9 +127,7 @@ class Player extends Actor {
       const nextY = currentY + direction.y;
       const isExceeding = isOutOfBounds(nextX, nextY);
       if (!isExceeding) {
-        if (map[nextX][nextY].tileType === "path") {
-          possibleDirections.push(direction);
-        } else if (map[nextX][nextY].tileType === "fire") {
+        if (map[nextX][nextY].tileType === tileType) {
           possibleDirections.push(direction);
         }
       }
@@ -127,6 +141,7 @@ class Player extends Actor {
   }
 
   removePreviousPositionFromDirections(possibleDirections) {
+    if (!this.direction) return;
     // At this point this.direction is still an old, not updated value
     // Invertion of it would look like "step-back"
     // And we want to remove it from possible positions
