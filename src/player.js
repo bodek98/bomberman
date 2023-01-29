@@ -18,8 +18,7 @@ class Player extends Actor {
 
     this.bomb = new Bomb(bombElement, -1, -1);
 
-    const date = new Date();
-    this.damageDeltaTime = date.getTime();
+    this.damageDeltaTime = 0;
     this.damageLastTime = 0;
   }
 
