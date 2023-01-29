@@ -20,11 +20,18 @@ class Game {
     let playerElement = document.createElement("div");
     playerElement.id = "player-" + playerType;
     this.mapManager.gameContainer.appendChild(playerElement);
+    let scoreElement = document.getElementById(playerType + "-player-score");
 
     // Logic
     this.players.set(
       playerType,
-      new Player(playerElement, x, y, this.mapManager.gameContainer)
+      new Player(
+        scoreElement,
+        playerElement,
+        x,
+        y,
+        this.mapManager.gameContainer
+      )
     );
   }
 

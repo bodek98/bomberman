@@ -1,6 +1,7 @@
 class Player extends Actor {
-  constructor(_element, _x = 0, _y = 0, gameContainer) {
+  constructor(_scoreElement, _element, _x = 0, _y = 0, gameContainer) {
     super(_element, _x, _y);
+    this.scoreElement = _scoreElement;
 
     // HTML construction
     this.element.classList.add("player");
@@ -9,12 +10,18 @@ class Player extends Actor {
 
     this.lastPosition = { x: _x, y: _y };
     this.direction = { x: 0, y: 0 };
+    this.health = 10;
 
     // Determines how many FPS will take to move 1 tile
     this.animationLength = FRAMERATE;
     this.traveledFrames = 0;
 
     this.bomb = new Bomb(bombElement, -1, -1);
+  }
+
+  getDamage() {
+    this.health--;
+    this.scoreElement.innerHTML = this.health;
   }
 
   moveBombToPlayer() {
