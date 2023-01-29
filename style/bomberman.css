@@ -1,6 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 body {
   margin: 0;
   padding: 0;
+  font-family: "Roboto", sans-serif;
 }
 
 #container {
@@ -76,4 +79,42 @@ body {
   background-image: url("../img/Player red.png");
   background-repeat: no-repeat;
   background-size: 100%, 100%;
+}
+
+/* Scoreboard */
+.score-board {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  width: max-content;
+  background: #fff;
+  border-radius: 24px;
+  padding: 8px 12px;
+}
+
+.score-board.green-player {
+  left: calc(15vw);
+}
+.score-board.red-player {
+  right: calc(15vw);
+}
+
+.score {
+  text-align: center;
+  font-size: 2em;
+}
+
+.player-icon {
+  width: 3em;
+  height: 3em;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#green-player-score-icon {
+  background-image: url("../img/Player green.png");
+}
+#red-player-score-icon {
+  background-image: url("../img/Player red.png");
 }
